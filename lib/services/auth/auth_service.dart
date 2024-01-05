@@ -61,4 +61,31 @@ class AuthService {
     await _auth.signOut();
     printSuccess('Logout successful');
   }
+
+  // Update user presence when the app is opened
+  Future<void> updateUserPresence() async {
+    if (_auth.currentUser != null) {
+      await _firestore.collection("Users").doc(_auth.currentUser!.uid).update({
+        'lastSeen': FieldValue.serverTimestamp(),
+        'online': true,
+      });
+    }
+  }
+
+  // Update user presence when the app is closed
+  Future<void> updateUserOffline() async {
+    if (_auth.currentUser != null) {
+      await _firestore.collection("Users").doc(_auth.currentUser!.uid).update({
+        'online': false,
+      });
+    }
+  }
+
+  // Stream for real-time user presence updates
+  Stream<DocumentSnapshot> getUserPresenceStream() {
+    return _firestore
+        .collection("Users")
+        .doc(_auth.currentUser!.uid)
+        .snapshots();
+  }
 }
