@@ -30,9 +30,6 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
 
-    // Add this line to update user presence when the ChatPage is opened
-    _authService.updateUserPresence();
-
     // add listener to focus node
     myFocusNode.addListener(() {
       if (myFocusNode.hasFocus) {
@@ -51,8 +48,6 @@ class _ChatPageState extends State<ChatPage> {
   void dispose() {
     myFocusNode.dispose();
     _messageController.dispose();
-    // Add this line to update user presence when the ChatPage is closed
-    _authService.updateUserOffline();
     super.dispose();
   }
 
